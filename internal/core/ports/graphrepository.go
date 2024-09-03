@@ -6,5 +6,5 @@ import (
 )
 
 type GraphRepository interface {
-	GetGraph(ctx context.Context) ([]*models.Node, []*models.Edge, error)
+	GetGraph(ctx context.Context) (*models.Graph, error)
 }

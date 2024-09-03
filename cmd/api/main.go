@@ -1,18 +1,15 @@
 package main
 
 import (
-	"context"
-	"fmt"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	neo4j2 "github.com/johnfercher/tech-knowledge/internal/adapters/drivens/neo4j"
+	http2 "github.com/johnfercher/tech-knowledge/internal/adapters/drivers/http"
 	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
 	"log"
+	"net/http"
 )
-
-type Node struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	Type string `json:"type"`
-}
 
 func main() {
 	driver, err := connectNeo4j()
@@ -20,22 +17,27 @@ func main() {
 		log.Fatal(err)
 	}
 
-	ctx := context.TODO()
-
 	repository := neo4j2.NewGraphRepository(driver)
 
-	nodes, edges, err := repository.GetGraph(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
+	fullGraphReader := http2.NewFullGraphReader(repository)
 
-	for _, node := range nodes {
-		fmt.Println(node)
-	}
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
 
-	for _, edge := range edges {
-		fmt.Println(edge)
-	}
+	r.Use(cors.Handler(cors.Options{
+		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
+		AllowedOrigins: []string{"https://*", "http://*"},
+		// AllowOriginFunc:  func(r *adapterhttp.Request, origin string) bool { return true },
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: false,
+		MaxAge:           0, // Maximum value not ignored by any of major browsers
+	}))
+
+	r.MethodFunc(fullGraphReader.Method(), fullGraphReader.Pattern(), fullGraphReader.Func)
+
+	http.ListenAndServe(":3000", r)
 }
 
 func connectNeo4j() (neo4j.DriverWithContext, error) {

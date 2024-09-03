@@ -15,7 +15,7 @@ func NewGraphRepository(db neo4j.DriverWithContext) *GraphRepository {
 	return &GraphRepository{db: db}
 }
 
-func (g *GraphRepository) GetGraph(ctx context.Context) ([]*models.Node, []*models.Edge, error) {
+func (g *GraphRepository) GetGraph(ctx context.Context) (*models.Graph, error) {
 	// Return path between vertex
 	result, err := neo4j.ExecuteQuery(ctx, g.db, `MATCH p=(x:Vertex)-[r]-(y:Vertex) WHERE (x)-[:related_to]->(y) RETURN p`,
 		nil,
@@ -27,8 +27,7 @@ func (g *GraphRepository) GetGraph(ctx context.Context) ([]*models.Node, []*mode
 		log.Fatal(err.Error())
 	}
 
-	nodes := []*models.Node{}
-	var edges []*models.Edge
+	graph := &models.Graph{}
 
 	for _, record := range result.Records {
 		path := record.Values[0].(neo4j.Path)
@@ -41,7 +40,7 @@ func (g *GraphRepository) GetGraph(ctx context.Context) ([]*models.Node, []*mode
 					Name: rawNode.Props["name"].(string),
 					Type: rawNode.Props["type"].(string),
 				}
-				nodes = append(nodes, node)
+				graph.Nodes = append(graph.Nodes, node)
 				continue
 			}
 
@@ -49,9 +48,9 @@ func (g *GraphRepository) GetGraph(ctx context.Context) ([]*models.Node, []*mode
 				AID: node.ID,
 				BID: rawNode.Props["id"].(string),
 			}
-			edges = append(edges, edge)
+			graph.Edges = append(graph.Edges, edge)
 		}
 	}
 
-	return nodes, edges, nil
+	return graph, nil
 }
