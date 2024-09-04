@@ -1,6 +1,7 @@
 <style scoped>
 .graph {
-  height: 500px;
+  border: solid red 1px;
+  height: 1080px;
 }
 </style>
 
@@ -51,10 +52,10 @@ export default {
                   const forceLink = d3.forceLink(edges).id(d => d.id)
                   return d3
                       .forceSimulation(nodes)
-                      .force("edge", forceLink.distance(200).strength(0.5))
-                      .force("charge", d3.forceManyBody().strength(-800))
-                      .force("center", d3.forceCenter().strength(0.05))
-                      .alphaMin(0.001)
+                      .force("edge", forceLink.distance(200).strength(20.5))
+                      .force("charge", d3.forceManyBody().strength(-10000))
+                      .force("center", d3.forceCenter().strength(0.101))
+                      .alphaMin(0.011)
                 }
               }),
             },
@@ -65,6 +66,40 @@ export default {
               },
               label: {
                 visible: true,
+              },
+            },
+            edge: {
+              selectable: true,
+              normal: {
+                width: 3,
+                color: "#4466cc",
+                dasharray: "0",
+                linecap: "butt",
+                animate: false,
+                animationSpeed: 50,
+              },
+              gap: 5,
+              type: "straight",
+              margin: 10,
+              marker: {
+                source: {
+                  type: "arrow",
+                  width: 4,
+                  height: 4,
+                  margin: -1,
+                  offset: 0,
+                  units: "strokeWidth",
+                  color: null,
+                },
+                target: {
+                  type: "none",
+                  width: 4,
+                  height: 4,
+                  margin: -1,
+                  offset: 0,
+                  units: "strokeWidth",
+                  color: null,
+                },
               },
             },
           })

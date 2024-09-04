@@ -36,7 +36,7 @@ func (g *GraphViewer) MapNodes(ctx context.Context, nodes []*models.Node) []*mod
 		nodeView := &models.NodeView{
 			ID:     node.ID,
 			Name:   node.Name,
-			Radius: 36,
+			Radius: 20,
 		}
 		views = append(views, nodeView)
 	}
