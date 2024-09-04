@@ -1,17 +1,23 @@
 package models
 
 type Graph struct {
-	Nodes []*Node `json:"nodes"`
-	Edges []*Edge `json:"edges"`
+	Nodes []*Node
+	Edges []*Edge
 }
 
 type Node struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	Type string `json:"type"`
+	ID     string
+	Name   string
+	Type   string
+	Vector *Vector
 }
 
 type Edge struct {
-	AID string `json:"aid"`
-	BID string `json:"bid"`
+	Source string
+	Target string
+}
+
+type Vector struct {
+	X int
+	Y int
 }

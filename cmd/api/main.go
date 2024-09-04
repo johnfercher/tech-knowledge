@@ -6,6 +6,7 @@ import (
 	"github.com/go-chi/cors"
 	neo4j2 "github.com/johnfercher/tech-knowledge/internal/adapters/drivens/neo4j"
 	http2 "github.com/johnfercher/tech-knowledge/internal/adapters/drivers/http"
+	"github.com/johnfercher/tech-knowledge/internal/services"
 	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
 	"log"
 	"net/http"
@@ -18,8 +19,9 @@ func main() {
 	}
 
 	repository := neo4j2.NewGraphRepository(driver)
+	graphViewer := services.NewGraphViewer(repository)
 
-	fullGraphReader := http2.NewFullGraphReader(repository)
+	fullGraphReader := http2.NewFullGraphReader(graphViewer)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)

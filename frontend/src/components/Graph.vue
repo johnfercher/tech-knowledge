@@ -1,20 +1,32 @@
 <style scoped>
-
+.graph {
+  width: 100%;
+  height: 1080px;
+}
 </style>
 
 <template>
-  <div>
-    {{ graph }}
+  <div v-if="graph !== null">
+    <VNetworkGraph
+        class="graph"
+        :nodes="graph.nodes"
+        :edges="graph.edges"
+    />
+  </div>
+  <div v-if="graph === null">
+    Loading...
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import VNetworkGraph from "v-network-graph"
 
 export default {
   name: 'HelloWorld',
   props: {
-    msg: String
+    msg: String,
+    VNetworkGraph,
   },
   data() {
     return {

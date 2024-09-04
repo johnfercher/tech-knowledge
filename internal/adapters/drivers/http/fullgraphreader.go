@@ -6,12 +6,12 @@ import (
 )
 
 type FullGraphReader struct {
-	repository ports.GraphRepository
+	graphViewer ports.GraphViewer
 }
 
-func NewFullGraphReader(repository ports.GraphRepository) *FullGraphReader {
+func NewFullGraphReader(graphViewer ports.GraphViewer) *FullGraphReader {
 	return &FullGraphReader{
-		repository: repository,
+		graphViewer: graphViewer,
 	}
 }
 
@@ -27,11 +27,13 @@ func (f *FullGraphReader) Func(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	ctx := r.Context()
 
-	graph, err := f.repository.GetGraph(ctx)
+	graph, err := f.graphViewer.GetGraph(ctx)
 	if err != nil {
 		WriteResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 
-	WriteResponse(w, graph, http.StatusOK)
+	response := Map(graph)
+
+	WriteResponse(w, response, http.StatusOK)
 }

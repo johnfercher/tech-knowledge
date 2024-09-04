@@ -10,7 +10,10 @@
   "dependencies": {
     "axios": "^1.7.7",
     "core-js": "^3.8.3",
-    "vue": "^3.2.13"
+    "d3-force": "^3.0.0",
+    "v-network-graph": "^0.9.16",
+    "vue": "^3.2.13",
+    "vue-d3-network": "^0.1.28"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
