@@ -6,18 +6,12 @@ type Graph struct {
 }
 
 type Node struct {
-	ID     string
-	Name   string
-	Type   string
-	Vector *Vector
+	ID   string
+	Name string
+	Type string
 }
 
 type Edge struct {
 	Source string
 	Target string
-}
-
-type Vector struct {
-	X int
-	Y int
 }

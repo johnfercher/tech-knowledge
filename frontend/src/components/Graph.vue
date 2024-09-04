@@ -1,16 +1,17 @@
 <style scoped>
 .graph {
-  width: 100%;
-  height: 1080px;
+  height: 500px;
 }
 </style>
 
 <template>
   <div v-if="graph !== null">
-    <VNetworkGraph
+    <v-network-graph
         class="graph"
+        :zoom-level="0.5"
         :nodes="graph.nodes"
         :edges="graph.edges"
+        :configs="configs"
     />
   </div>
   <div v-if="graph === null">
@@ -21,16 +22,53 @@
 <script>
 import axios from "axios";
 import VNetworkGraph from "v-network-graph"
+import * as vNG from "v-network-graph"
+import {
+  ForceLayout,
+} from "v-network-graph/lib/force-layout"
+import {reactive, ref} from "vue";
 
 export default {
   name: 'HelloWorld',
   props: {
-    msg: String,
     VNetworkGraph,
   },
   data() {
     return {
-      graph: null,
+      graph: {
+        nodes: [],
+        edges: [],
+      },
+      nodeCount: ref(20),
+      configs: reactive(
+          vNG.defineConfigs({
+            view: {
+              layoutHandler: new ForceLayout({
+                positionFixedByDrag: false,
+                positionFixedByClickWithAltKey: true,
+                createSimulation: (d3, nodes, edges) => {
+                  // d3-force parameters
+                  const forceLink = d3.forceLink(edges).id(d => d.id)
+                  return d3
+                      .forceSimulation(nodes)
+                      .force("edge", forceLink.distance(200).strength(0.5))
+                      .force("charge", d3.forceManyBody().strength(-800))
+                      .force("center", d3.forceCenter().strength(0.05))
+                      .alphaMin(0.001)
+                }
+              }),
+            },
+            node: {
+              normal: {
+                radius: n => n.radius,
+                color: n => n.color,
+              },
+              label: {
+                visible: true,
+              },
+            },
+          })
+      )
     }
   },
   async mounted() {

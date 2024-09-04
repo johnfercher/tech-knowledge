@@ -39,10 +39,6 @@ func (g *GraphRepository) GetGraph(ctx context.Context) (*models.Graph, error) {
 					ID:   rawNode.Props["id"].(string),
 					Name: rawNode.Props["name"].(string),
 					Type: rawNode.Props["type"].(string),
-					Vector: &models.Vector{
-						X: 0,
-						Y: 0,
-					},
 				}
 				graph.Nodes = append(graph.Nodes, node)
 				continue

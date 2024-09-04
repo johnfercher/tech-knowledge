@@ -1,15 +1,14 @@
 <template>
-  <Graph2/>
+  <Graph/>
 </template>
 
 <script>
-//import Graph from './components/Graph.vue'
-import Graph2 from './components/Graph2.vue'
+import Graph from './components/Graph.vue'
 
 export default {
   name: 'App',
   components: {
-    Graph2,
+    Graph,
   }
 }
 </script>

@@ -11,11 +11,10 @@ type Graph struct {
 }
 
 type Node struct {
-	X    int    `json:"x"`
-	Y    int    `json:"y"`
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	Type string `json:"type"`
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Color  string `json:"color"`
+	Radius int    `json:"radius"`
 }
 
 type Edge struct {
@@ -23,7 +22,7 @@ type Edge struct {
 	Target string `json:"target"`
 }
 
-func Map(graph *models.Graph) *Graph {
+func Map(graph *models.GraphView) *Graph {
 	response := &Graph{
 		Nodes: make(map[string]*Node),
 		Edges: make(map[string]*Edge),
@@ -31,13 +30,10 @@ func Map(graph *models.Graph) *Graph {
 
 	for _, node := range graph.Nodes {
 		n := &Node{
-			ID:   node.ID,
-			Name: node.Name,
-			Type: node.Type,
-		}
-		if node.Vector != nil {
-			n.X = node.Vector.X
-			n.Y = node.Vector.Y
+			ID:     node.ID,
+			Name:   node.Name,
+			Color:  node.Color,
+			Radius: node.Radius,
 		}
 		response.Nodes[node.ID] = n
 

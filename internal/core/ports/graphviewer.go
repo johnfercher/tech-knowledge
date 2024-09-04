@@ -6,5 +6,5 @@ import (
 )
 
 type GraphViewer interface {
-	GetGraph(ctx context.Context) (*models.Graph, error)
+	GetGraph(ctx context.Context) (*models.GraphView, error)
 }
