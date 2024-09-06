@@ -5,18 +5,28 @@ import "math/rand"
 type GraphView struct {
 	Nodes []*NodeView
 	Edges []*EdgeView
+	Paths []*PathView
 }
 
 type NodeView struct {
-	ID     string
-	Name   string
-	Color  string
-	Radius int
+	ID           string
+	Name         string
+	Color        string
+	Radius       int
+	BorderRadius int
+	Type         string
+	Width        int
+	Height       int
 }
 
 type EdgeView struct {
 	Source string
 	Target string
+}
+
+type PathView struct {
+	Edges []string
+	Color string
 }
 
 func GetRandomColor() string {

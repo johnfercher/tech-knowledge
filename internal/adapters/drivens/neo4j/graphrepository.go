@@ -40,6 +40,12 @@ func (g *GraphRepository) GetGraph(ctx context.Context) (*models.Graph, error) {
 					Name: rawNode.Props["name"].(string),
 					Type: rawNode.Props["type"].(string),
 				}
+
+				label, ok := rawNode.Props["label"].(string)
+				if ok {
+					node.Label = label
+				}
+
 				graph.Nodes = append(graph.Nodes, node)
 				continue
 			}

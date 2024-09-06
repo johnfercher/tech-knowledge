@@ -6,9 +6,10 @@ type Graph struct {
 }
 
 type Node struct {
-	ID   string
-	Name string
-	Type string
+	ID    string
+	Name  string
+	Label string
+	Type  string
 }
 
 type Edge struct {

@@ -24,10 +24,10 @@
 import axios from "axios";
 import VNetworkGraph from "v-network-graph"
 import * as vNG from "v-network-graph"
-import {
+/*import {
   ForceLayout,
-} from "v-network-graph/lib/force-layout"
-import {reactive, ref} from "vue";
+} from "v-network-graph/lib/force-layout"*/
+import {reactive} from "vue";
 
 export default {
   name: 'HelloWorld',
@@ -40,10 +40,9 @@ export default {
         nodes: [],
         edges: [],
       },
-      nodeCount: ref(20),
       configs: reactive(
           vNG.defineConfigs({
-            view: {
+            /*view: {
               layoutHandler: new ForceLayout({
                 positionFixedByDrag: false,
                 positionFixedByClickWithAltKey: true,
@@ -58,14 +57,23 @@ export default {
                       .alphaMin(0.011)
                 }
               }),
-            },
+            },*/
             node: {
               normal: {
                 radius: n => n.radius,
                 color: n => n.color,
+                borderRadius: n => n.border_radius,
+                type: n => n.type,
+                width: n => n.width,
+                height: n => n.height,
+
               },
               label: {
                 visible: true,
+                color: "#ffffff",
+                direction: "center",
+                fontSize: 11,
+                scale: 100,
               },
             },
             edge: {

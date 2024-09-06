@@ -6,6 +6,8 @@ import (
 	"github.com/johnfercher/tech-knowledge/internal/core/ports"
 )
 
+var MinWidth = 50
+
 type GraphViewer struct {
 	repository ports.GraphRepository
 }
@@ -34,10 +36,31 @@ func (g *GraphViewer) MapNodes(ctx context.Context, nodes []*models.Node) []*mod
 	views := []*models.NodeView{}
 	for _, node := range nodes {
 		nodeView := &models.NodeView{
-			ID:     node.ID,
-			Name:   node.Name,
-			Radius: 20,
+			ID:   node.ID,
+			Name: node.Name,
 		}
+
+		if node.Label != "" {
+			nodeView.Name = node.Label
+		}
+
+		if node.Type == "Area" {
+			nodeView.Type = "rect"
+			nodeView.Width = GetWidthFromText(nodeView.Name)
+			nodeView.Height = 40
+			nodeView.BorderRadius = 10
+		} else if node.Type == "Section" {
+			nodeView.Type = "rect"
+			nodeView.Width = GetWidthFromText(nodeView.Name)
+			nodeView.Height = 40
+			nodeView.BorderRadius = 10
+		} else {
+			nodeView.Type = "rect"
+			nodeView.Width = GetWidthFromText(nodeView.Name)
+			nodeView.Height = 40
+			nodeView.BorderRadius = 10
+		}
+
 		views = append(views, nodeView)
 	}
 
@@ -61,4 +84,9 @@ func (g *GraphViewer) ApplyNodeStyle(ctx context.Context, graph *models.GraphVie
 	for i := 0; i < len(graph.Nodes); i++ {
 		graph.Nodes[i].Color = models.GetRandomColor()
 	}
+}
+
+func GetWidthFromText(text string) int {
+	borderSpace := 30
+	return len(text)*5 + borderSpace
 }
